@@ -5,10 +5,12 @@ Function Get-CalibrationValue {
     begin {
         $Value = 0
         $Capture = '(\d|one|two|three|four|five|six|seven|eight|nine)'
+        $CaptureLeft='.*?{0}.*' -F$Capture
+        $CaptureRight='.*{0}.*' -F$Capture
     }
     process {
-        $start = $Line -replace ('.*?{0}.*' -F$Capture), '$1'
-        $end = $Line -replace ('.*{0}.*' -F$Capture), '$1'
+        $start = $Line -replace $CaptureLeft, '$1'
+        $end = $Line -replace $CaptureRight, '$1'
 
         $start, $end = $start, $end -replace 'one',   '1' `
                                     -replace 'two',   '2' `
@@ -27,6 +29,7 @@ Function Get-CalibrationValue {
 }
 
 $Demo = "two1nine|eightwothree|abcone2threexyz|xtwone3four|4nineeightseven2|zoneight234|7pqrstsixteen"
+
 $Demo -split '\|' | Get-CalibrationValue
 
 Get-Content "$PSScriptRoot\Input-1.txt" | Get-CalibrationValue
