@@ -7,9 +7,9 @@
         $SumPowers = 0;
     }
     Process {
-        [int]$GameId,[string]$Grabbed = $Game -replace '^Game ','' -split ': '
         $max = @{ red=0; green=0; blue=0 }
-        $Grabbed -split '[;,]\s' | % {
+        [int]$GameId,[string[]]$Grabbed = $Game -replace '^Game ','' -split '[:;,]\s'
+        $Grabbed | % {
             [int]$Count,[string]$Color = $_ -split ' ';
             if ($Count -gt $max[$Color]) { $max[$Color] = $Count }
         }
