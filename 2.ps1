@@ -8,15 +8,13 @@
     }
     Process {
         [int]$GameId,[string]$Grabbed = $Game -replace '^Game ','' -split ': '
-        $max = @{'red'=0; 'green'=0; 'blue'=0 }
-        $Grabbed -split '; ' | % {
-            $_ -split ', ' |% {
-                [int]$Count,[string]$Color = $_ -split ' ';
-                if ($Count -gt $max[$Color]) { $max[$Color] = $Count }
-            }
+        $max = @{ red=0; green=0; blue=0 }
+        $Grabbed -split '[;,]\s' | % {
+            [int]$Count,[string]$Color = $_ -split ' ';
+            if ($Count -gt $max[$Color]) { $max[$Color] = $Count }
         }
         If (($max['red'] -le 12) -and ($max['green'] -le 13) -and ($max['blue'] -le 14)) {
-            $SumValidIDs+= $GameId
+            $SumValidIDs += $GameId
         }
         $SumPowers += $max['red']*$max['green']*$max['blue']
     }
