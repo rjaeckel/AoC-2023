@@ -1,6 +1,6 @@
 Function Get-CalibrationValue {
     [CmdletBinding()]param(
-        [Parameter(ValueFromPipeline=$true)][String]$Line,
+        [Parameter(ValueFromPipeline)][String]$Line,
         [Switch]$FirstPart
     )
     begin {
@@ -12,11 +12,15 @@ Function Get-CalibrationValue {
     process {
         $start = $Line -replace $CaptureLeft, '$1'
         $end = $Line -replace $CaptureRight, '$1'
-        if (-not $FirstPart) {             $start, $end =                $start, $end -replace 'one',   '1' `                             -replace 'two',   '2' `
+        if (-not $FirstPart) { 
+            $start, $end =
+                $start, $end -replace 'one',   '1' `
+                             -replace 'two',   '2' `
                              -replace 'three', '3' `
                              -replace 'four',  '4' `
                              -replace 'five',  '5' `
-                             -replace 'six',   '6' `                             -replace 'seven', '7' `
+                             -replace 'six',   '6' `
+                             -replace 'seven', '7' `
                              -replace 'eight', '8' `
                              -replace 'nine',  '9'
         }

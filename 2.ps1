@@ -1,6 +1,6 @@
 ﻿Function Test-Games {
     [CmdletBinding()]param(
-        [Parameter(ValueFromPipeline=$true)][String]$Game
+        [Parameter(ValueFromPipeline)][String]$Game
     )
     Begin {
         $SumValidIDs = 0;
