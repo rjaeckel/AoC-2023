@@ -8,20 +8,20 @@ Function Get-CardPoints {
         $Copies=@{}
     }
     process {
-        [string]$cardNo,[string]$wins,[string]$numbers = $Card -split '(?:(?:\s*[|:]|Card)\s+)' -ne ''
-        $WinSplit = '\s+(?:{0})(?!\d)' -F ($wins -replace'\s+', '|')
-        $CountWinning = (" $numbers" -split $WinSplit).Count-1
-        $SumCards+=[int][Math]::Pow(2, $CountWinning-1)
+        [int]$cardNo, [string]$wins, [string]$numbers = $Card -split '(?:\s*[|:]|Card)\s+' -ne ''
+        $WinSplit = '(?:^|\s)(?:{0})(?!\d)' -F ($wins -replace'\s+', '|')
+        $CountWinning = ($numbers -split $WinSplit).Count-1
+        $SumCards += [int][Math]::Pow(2, $CountWinning-1)
 
-        if(-not $Copies.ContainsKey($cardNo)) { $Copies += @{$cardNo=1} }
-        $Totalcards+=$Copies.$cardNo
+        $numCards = if ($Copies.ContainsKey($cardNo)) { $Copies.$cardNo } else { 1 }
+        $Totalcards += $numCards
 
         if ($CountWinning) {
             (1+$cardNo)..($CountWinning+$cardNo) |% {
-                if($Copies.ContainsKey("$_")) {
-                    $Copies."$_"+=$Copies.$cardNo
+                if ($Copies.ContainsKey($_)) {
+                    $Copies.$_+=$numCards
                 } else {
-                    $Copies+=@{"$_"=$Copies.$cardNo+1}
+                    $Copies+=@{$_=$numCards+1}
                 }
             }
         }
