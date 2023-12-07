@@ -4,12 +4,14 @@
     )
     begin {
         $Hands = [System.Collections.ArrayList]@()
+        $J=[char]'J'
     }
     process {
         If($Hand -match '^(\w{5})\s+(\d+)$') {
             $Cards, [int]$Bid = $Matches[1,2]
-            $enum = $Cards[0..4] |% -Begin { $x = @{"0"=0; "J"=0} } -End { $x } {
-                $x["$_"]=If($x.ContainsKey("$_")) {1 + $x["$_"] } else { 1 }
+            $enum = $Cards[0..4] |% -Begin { $x = @{"0"=0; $J=0} } -End { $x } {
+                #$_.GetType().Name | Write-Host -ForegroundColor Green
+                $x.$_=If($x.ContainsKey($_)) {1 + $x.$_ } else { 1 }
             }
             #AKQJT9..2 => SRQPO9..2
             $Values = $Cards -replace 'A','S' -replace 'K','R' -replace 'J','P' -replace 'T','O'
@@ -17,8 +19,8 @@
 
             $Values2 = $Values -replace 'P','1'
 
-            $Jokers = $enum['J']
-            $enum.Remove('J')
+            $Jokers = $enum[$J]
+            $enum.Remove($J)
 
             $l,$r = ($enum.Values + @(0) | Sort-Object -Descending)[0,1]
             [int]$Strength2 = ($l+$Jokers),$r -join ''
