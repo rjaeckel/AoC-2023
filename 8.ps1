@@ -1,4 +1,4 @@
-﻿Function Test-NavigationNetwork {
+Function Test-NavigationNetwork {
     [CmdletBinding()]param(
         [Parameter(ValueFromPipeline)]$Line,
         [Switch]$Part1
@@ -46,7 +46,6 @@
                     $Location = $Nodes.$Location.$Move
                 }
                 Write-Host -ForegroundColor Green "$Location $Moves"
-                #$z=$Moves
                 $primes|% {
                     $n = 0
                     while ($Moves % $_ -eq 0) { $n++; $Moves=$Moves/$_}
@@ -56,8 +55,8 @@
             }
             $product = 1
             $Factors.GetEnumerator() |% {
-                $product *= $_.Key*$_.Value
-                Write-Host -ForegroundColor Cyan ('{0} x {1}' -F $_.Key,$_.Value)
+                $product *= [Math]::Pow($_.Key,$_.Value)
+                Write-Host -ForegroundColor Cyan ('{0} ^ {1}' -F $_.Key,$_.Value)
             }
             "Part2: $product"
         }
