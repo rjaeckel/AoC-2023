@@ -15,20 +15,22 @@
             $row = 1..($row.Count-1)|% {
                 $row[$_]-$row[$_-1]
             }
-            $row -join ' ' | Write-Host -ForegroundColor Cyan
+            #$row -join ' ' | Write-Host -ForegroundColor Cyan
         } while ($row|Measure-Object -Maximum -Minimum|? {$_.Maximum -ne $_.Minimum })
         $History.$level = $row
         $n = 0
         $p = 0
         $level..0 |% {
             $n+=$History.$_[-1]
-            #? $p-=$History.$_[0]
+            $p=$History.$_[0]-$p
         }
+        #Write-Host -ForegroundColor Green $p
         $Next+=$n
         $Previous+=$p
     }
     end {
         $Next
+        $Previous
     }
 }
 
